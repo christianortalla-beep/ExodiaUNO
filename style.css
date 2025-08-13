@@ -3045,27 +3045,26 @@ body {
             transform: translateY(-2px);
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .auth-modal-content {
-                width: 95%;
-                padding: 1.5rem;
-            }
-
-            .auth-header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .form-options {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-actions {
-                display: none;
-            }
+        /* Auth Blocker */
+        #authBlocker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 10001;
+            display: none;
+            pointer-events: all;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-        /* Hero Comparison Section */
+        #authBlocker span {
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .auth-modal {
+            z-index: 10002; /* Modal above blocker */
+        }

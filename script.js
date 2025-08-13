@@ -1222,18 +1222,26 @@ trackEvent('page_view', {
             checkAuthStatus();
         });
 
+        function showAuthBlocker() {
+            document.getElementById('authBlocker').style.display = 'block';
+        }
+        function hideAuthBlocker() {
+            document.getElementById('authBlocker').style.display = 'none';
+        }
+
         function checkAuthStatus() {
             const savedUser = localStorage.getItem('exodiaUser');
             if (savedUser) {
                 currentUser = JSON.parse(savedUser);
                 isAuthenticated = true;
                 updateAuthUI();
+                hideAuthBlocker();
                 showNotification(`Welcome back, ${currentUser.username}!`, 'success');
             } else {
-                // Show auth modal if not authenticated
+                showAuthBlocker();
                 setTimeout(() => {
                     openAuthModal();
-                }, 2000); // Show after 2 seconds
+                }, 2000);
             }
         }
 
@@ -1252,13 +1260,10 @@ trackEvent('page_view', {
         }
 
         function closeAuthModal() {
-            // Only allow closing if user is authenticated
-            if (!isAuthenticated) {
-                return;
-            }
             const modal = document.getElementById('authModal');
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
+            hideAuthBlocker();
         }
 
         function switchAuthTab(tab) {
@@ -1280,54 +1285,12 @@ trackEvent('page_view', {
             }
         }
 
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
-
-            // Simple validation
-            if (!email || !password) {
-                showNotification('Please fill in all fields', 'error');
-                return;
-            }
-
-            // Simulate login process
-            showNotification('Logging in...', 'info');
-            
-            setTimeout(() => {
-                // For demo purposes, accept any valid email format
-                if (email.includes('@') && password.length >= 6) {
-                    currentUser = {
-                        username: email.split('@')[0],
-                        email: email,
-                        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
-                    };
-                    
-                    isAuthenticated = true;
-                    
-                    if (rememberMe) {
-                        localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
-                    }
-                    
-                    updateAuthUI();
-                    closeAuthModal();
-                    showNotification(`Welcome, ${currentUser.username}!`, 'success');
-                    
-                    // Clear form
-                    document.getElementById('loginForm').reset();
-                } else {
-                    showNotification('Invalid email or password', 'error');
-                }
-            }, 1500);
-        }
-
+        // Store user credentials in localStorage under 'exodiaUserAccount'
         function handleSignup(event) {
             event.preventDefault();
-            
-            const username = document.getElementById('signupUsername').value;
-            const email = document.getElementById('signupEmail').value;
+
+            const username = document.getElementById('signupUsername').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const agreeTerms = document.getElementById('agreeTerms').checked;
@@ -1337,69 +1300,117 @@ trackEvent('page_view', {
                 showNotification('Please fill in all fields', 'error');
                 return;
             }
-
             if (password !== confirmPassword) {
                 showNotification('Passwords do not match', 'error');
                 return;
             }
-
             if (password.length < 6) {
                 showNotification('Password must be at least 6 characters', 'error');
                 return;
             }
-
             if (!agreeTerms) {
                 showNotification('Please agree to the terms and conditions', 'error');
                 return;
             }
 
+            // Save credentials to localStorage
+            const account = { username, email, password };
+            localStorage.setItem('exodiaUserAccount', JSON.stringify(account));
+
             // Simulate signup process
             showNotification('Creating account...', 'info');
-            
             setTimeout(() => {
                 currentUser = {
                     username: username,
                     email: email,
                     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`
                 };
-                
                 isAuthenticated = true;
                 localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
-                
+                updateAuthUI();
+                showNotification(`Account created! Welcome, ${username}!`, 'success');
+                document.getElementById('signupForm').reset();
+                closeAuthModal(); // <-- Move this here!
+            }, 1500);
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // Fetch credentials from localStorage
+            const accountStr = localStorage.getItem('exodiaUserAccount');
+            const loginError = document.getElementById('loginError');
+            if (!accountStr) {
+                showNotification('No account found. Please sign up first.', 'error');
+                if (loginError) {
+                    loginError.textContent = 'No account found. Please sign up first.';
+                    loginError.style.display = 'block';
+                }
+                return;
+            }
+            const account = JSON.parse(accountStr);
+
+            // Validate credentials
+            if (email !== account.email || password !== account.password) {
+                showNotification('Invalid email or password', 'error');
+                if (loginError) {
+                    loginError.textContent = 'Invalid email or password.';
+                    loginError.style.display = 'block';
+                }
+                return;
+            }
+
+            // Simulate login process
+            if (loginError) loginError.style.display = 'none';
+            showNotification('Logging in...', 'info');
+            setTimeout(() => {
+                currentUser = {
+                    username: account.username,
+                    email: account.email,
+                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${account.username}`
+                };
+                isAuthenticated = true;
+                localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
                 updateAuthUI();
                 closeAuthModal();
-                showNotification(`Account created successfully! Welcome, ${username}!`, 'success');
-                
-                // Clear form
-                document.getElementById('signupForm').reset();
-            }, 1500);
+                showNotification(`Welcome back, ${account.username}!`, 'success');
+                document.getElementById('loginForm').reset();
+            }, 1200);
         }
 
         function updateAuthUI() {
             const loginBtn = document.getElementById('loginBtn');
             const userProfileBtn = document.getElementById('userProfileBtn');
-            const userName = document.getElementById('userName');
-
+            const userNameSpan = document.getElementById('userName');
             if (isAuthenticated && currentUser) {
                 loginBtn.style.display = 'none';
                 userProfileBtn.style.display = 'flex';
-                userName.textContent = currentUser.username;
+                userNameSpan.textContent = currentUser.username; // <-- FIXED HERE
             } else {
-                loginBtn.style.display = 'flex';
+                loginBtn.style.display = 'inline-block';
                 userProfileBtn.style.display = 'none';
             }
         }
 
         function logout() {
-            currentUser = null;
             isAuthenticated = false;
-            localStorage.removeItem('exodiaUser');
+            currentUser = null;
             updateAuthUI();
-            showNotification('Logged out successfully', 'info');
-            // Force show auth modal again since authentication is required
-            setTimeout(() => {
-                openAuthModal();
-            }, 1000);
+            showNotification('You have been logged out.', 'info');
+        }
+
+        function deleteAccount() {
+            localStorage.removeItem('exodiaUserAccount');
+            localStorage.removeItem('exodiaUser');
+            showNotification('Account deleted. You must sign up again to access the site.', 'info');
+            isAuthenticated = false;
+            currentUser = null;
+            updateAuthUI();
+            showAuthBlocker();
+            openAuthModal();
         }
 
         // Close modal when clicking outside - DISABLED for security
@@ -1424,5 +1435,5 @@ trackEvent('page_view', {
                 showNotification(`Logged in as ${currentUser.username}`, 'info');
             }
         });
-        
+
 

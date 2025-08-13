@@ -120,6 +120,7 @@
             
             <!-- Login Form -->
             <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                <div id="loginError" style="color: #ff6b35; display: none; margin-bottom: 8px;"></div>
                 <div class="form-group">
                     <label for="loginEmail">Email</label>
                     <input type="email" id="loginEmail" required>
@@ -179,6 +180,10 @@
         </div>
     </div>
     
+    <div id="authBlocker" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);z-index:10001;display:none;pointer-events:all;align-items:center;justify-content:center;">
+      <span style="color:#fff;font-size:1.5rem;text-align:center;">Please log in or sign up to access the site.</span>
+    </div>
+    
     <header class="header">
         <nav class="nav">
             <div class="logo">
@@ -201,10 +206,13 @@
                     <i class="fas fa-sign-in-alt"></i>
                     Login
                 </button>
-                <button class="user-profile-btn" id="userProfileBtn" style="display: none;">
+                <div class="user-profile-btn" id="userProfileBtn" style="display: none; position: relative;">
                     <i class="fas fa-user"></i>
                     <span id="userName">User</span>
-                </button>
+                    <button class="logout-btn" onclick="logout()" style="margin-left: 10px; background: #ff6b35; color: #fff; border: none; border-radius: 8px; padding: 4px 12px; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
             </div>
             <div class="mobile-menu-btn">
                 <span></span>
