@@ -1289,60 +1289,84 @@ trackEvent('page_view', {
         function handleSignup(event) {
             event.preventDefault();
 
-            const username = document.getElementById('signupUsername').value.trim();
+            // Clear all field errors
+            ['errorFullName','errorEmail','errorPassword','errorConfirmPassword','errorPhone','errorTerms'].forEach(id => {
+                document.getElementById(id).textContent = '';
+            });
+
+            const fullName = document.getElementById('signupFullName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const agreeTerms = document.getElementById('agreeTerms').checked;
 
-            // Validation
-            if (!username || !email || !password || !confirmPassword) {
-                showNotification('Please fill in all fields', 'error');
-                return;
+            let hasError = false;
+
+            if (!fullName) {
+                document.getElementById('errorFullName').textContent = 'Full name is required.';
+                hasError = true;
             }
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match', 'error');
-                return;
+            if (!email) {
+                document.getElementById('errorEmail').textContent = 'Email is required.';
+                hasError = true;
             }
-            if (password.length < 6) {
-                showNotification('Password must be at least 6 characters', 'error');
-                return;
+            if (!phone) {
+                document.getElementById('errorPhone').textContent = 'Phone number is required.';
+                hasError = true;
+            }
+            if (!password) {
+                document.getElementById('errorPassword').textContent = 'Password is required.';
+                hasError = true;
+            } else if (password.length < 6) {
+                document.getElementById('errorPassword').textContent = 'Password must be at least 6 characters.';
+                hasError = true;
+            }
+            if (!confirmPassword) {
+                document.getElementById('errorConfirmPassword').textContent = 'Please confirm your password.';
+                hasError = true;
+            } else if (password !== confirmPassword) {
+                document.getElementById('errorConfirmPassword').textContent = 'Passwords do not match.';
+                hasError = true;
             }
             if (!agreeTerms) {
-                showNotification('Please agree to the terms and conditions', 'error');
-                return;
+                document.getElementById('errorTerms').textContent = 'You must agree to the terms.';
+                hasError = true;
             }
 
+            if (hasError) return;
+
             // Save credentials to localStorage
-            const account = { username, email, password };
+            const account = { fullName, email, phone, password };
             localStorage.setItem('exodiaUserAccount', JSON.stringify(account));
 
-            // Simulate signup process
             showNotification('Creating account...', 'info');
             setTimeout(() => {
                 currentUser = {
-                    username: username,
+                    fullName: fullName,
                     email: email,
-                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`
+                    phone: phone,
+                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(fullName)}`
                 };
                 isAuthenticated = true;
                 localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
                 updateAuthUI();
-                showNotification(`Account created! Welcome, ${username}!`, 'success');
+                showNotification(`Account created! Welcome, ${fullName}!`, 'success');
                 document.getElementById('signupForm').reset();
-                closeAuthModal(); // <-- Move this here!
+                closeAuthModal();
             }, 1500);
         }
 
         function handleLogin(event) {
             event.preventDefault();
-
             const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
+            const loginError = document.getElementById('loginError');
+
+            if (loginError) loginError.style.display = 'none';
 
             // Fetch credentials from localStorage
             const accountStr = localStorage.getItem('exodiaUserAccount');
-            const loginError = document.getElementById('loginError');
             if (!accountStr) {
                 showNotification('No account found. Please sign up first.', 'error');
                 if (loginError) {
@@ -1363,20 +1387,19 @@ trackEvent('page_view', {
                 return;
             }
 
-            // Simulate login process
-            if (loginError) loginError.style.display = 'none';
             showNotification('Logging in...', 'info');
             setTimeout(() => {
                 currentUser = {
-                    username: account.username,
+                    fullName: account.fullName,
                     email: account.email,
-                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${account.username}`
+                    phone: account.phone,
+                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(account.fullName)}`
                 };
                 isAuthenticated = true;
                 localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
                 updateAuthUI();
                 closeAuthModal();
-                showNotification(`Welcome back, ${account.username}!`, 'success');
+                showNotification(`Welcome back, ${account.fullName}!`, 'success');
                 document.getElementById('loginForm').reset();
             }, 1200);
         }
@@ -1388,7 +1411,7 @@ trackEvent('page_view', {
             if (isAuthenticated && currentUser) {
                 loginBtn.style.display = 'none';
                 userProfileBtn.style.display = 'flex';
-                userNameSpan.textContent = currentUser.username; // <-- FIXED HERE
+                userNameSpan.textContent = currentUser.fullName;
             } else {
                 loginBtn.style.display = 'inline-block';
                 userProfileBtn.style.display = 'none';
