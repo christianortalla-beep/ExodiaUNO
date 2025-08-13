@@ -2383,136 +2383,7 @@ body {
     box-shadow: 0 0 10px rgba(255, 107, 53, 0.3);
 }
 
-/* Live Statistics Dashboard */
-.live-stats-dashboard {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid rgba(255, 107, 53, 0.3);
-    border-radius: 15px;
-    padding: 1.5rem;
-    backdrop-filter: blur(20px);
-    z-index: 999;
-    min-width: 280px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
 
-.stats-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 107, 53, 0.2);
-}
-
-.stats-header h3 {
-    color: #ff6b35;
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-.status-indicator {
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.status-indicator.online {
-    background: rgba(76, 175, 80, 0.2);
-    color: #4CAF50;
-    border: 1px solid rgba(76, 175, 80, 0.3);
-}
-
-.minimize-btn {
-    background: rgba(255, 107, 53, 0.4);
-    border: 2px solid rgba(255, 107, 53, 0.6);
-    color: #ff6b35;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 14px;
-    position: relative;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
-    animation: pulse 2s infinite;
-}
-
-.minimize-btn:hover {
-    background: rgba(255, 107, 53, 0.6);
-    border-color: rgba(255, 107, 53, 0.9);
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px rgba(255, 107, 53, 0.7);
-    animation: none;
-}
-
-.minimize-btn:active {
-    transform: scale(0.95);
-}
-
-.live-stats-dashboard.minimized .stats-grid {
-    display: none;
-}
-
-.live-stats-dashboard.minimized .minimize-btn i {
-    transform: rotate(180deg);
-}
-
-.stats-grid {
-    display: grid;
-    gap: 1rem;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.8rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.stat-item:hover {
-    background: rgba(255, 107, 53, 0.1);
-    transform: translateX(5px);
-}
-
-.stat-icon {
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 107, 53, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ff6b35;
-    font-size: 1.1rem;
-}
-
-.stat-info {
-    flex: 1;
-}
-
-.stat-value {
-    display: block;
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.2rem;
-}
-
-.stat-label {
-    color: #ccc;
-    font-size: 0.8rem;
-}
 
 /* Hero Comparison Section */
 .hero-comparison-section {
@@ -2768,3 +2639,137 @@ body {
         font-size: 1.2rem;
     }
 }
+
+        /* Live Statistics Dashboard */
+        .live-stats-dashboard {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(255, 107, 53, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            min-width: 280px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none; /* Hide the dashboard by default */
+        }
+
+        .stats-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .stats-header h3 {
+            color: #ff6b35;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .status-indicator {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-indicator.online {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .minimize-btn {
+            background: rgba(255, 107, 53, 0.4);
+            border: 2px solid rgba(255, 107, 53, 0.6);
+            color: #ff6b35;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            position: relative;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .minimize-btn:hover {
+            background: rgba(255, 107, 53, 0.6);
+            border-color: rgba(255, 107, 53, 0.9);
+            transform: scale(1.1);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.7);
+            animation: none;
+        }
+
+        .minimize-btn:active {
+            transform: scale(0.95);
+        }
+
+        .live-stats-dashboard.minimized .stats-grid {
+            display: none;
+        }
+
+        .live-stats-dashboard.minimized .minimize-btn i {
+            transform: rotate(180deg);
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateX(5px);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 53, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b35;
+            font-size: 1.1rem;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            display: block;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-label {
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+        
+        /* Hero Comparison Section */

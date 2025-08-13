@@ -1163,22 +1163,36 @@ trackEvent('page_view', {
     timestamp: new Date().toISOString()
 });
 
-// Toggle Stats Dashboard Minimize Function
-function toggleStatsDashboard() {
-    const statsDashboard = document.getElementById('liveStats');
-    const minimizeBtn = statsDashboard.querySelector('.minimize-btn i');
-    
-    if (statsDashboard.classList.contains('minimized')) {
-        // Expand the dashboard
-        statsDashboard.classList.remove('minimized');
-        minimizeBtn.className = 'fas fa-minus';
-        minimizeBtn.parentElement.title = 'Minimize';
-        showNotification('Stats dashboard expanded', 'info');
-    } else {
-        // Minimize the dashboard
-        statsDashboard.classList.add('minimized');
-        minimizeBtn.className = 'fas fa-plus';
-        minimizeBtn.parentElement.title = 'Expand';
-        showNotification('Stats dashboard minimized', 'info');
-    }
-}
+        // Toggle Stats Dashboard Minimize Function
+        function toggleStatsDashboard() {
+            const statsDashboard = document.getElementById('liveStats');
+            const minimizeBtn = statsDashboard.querySelector('.minimize-btn i');
+            
+            if (statsDashboard.classList.contains('minimized')) {
+                // Expand the dashboard
+                statsDashboard.classList.remove('minimized');
+                minimizeBtn.className = 'fas fa-minus';
+                minimizeBtn.parentElement.title = 'Minimize';
+                showNotification('Stats dashboard expanded', 'info');
+            } else {
+                // Minimize the dashboard
+                statsDashboard.classList.add('minimized');
+                minimizeBtn.className = 'fas fa-plus';
+                minimizeBtn.parentElement.title = 'Expand';
+                showNotification('Stats dashboard minimized', 'info');
+            }
+        }
+
+        // Function to show/hide the entire live stats dashboard
+        function toggleLiveStatsVisibility() {
+            const statsDashboard = document.getElementById('liveStats');
+            if (statsDashboard.style.display === 'none' || statsDashboard.style.display === '') {
+                statsDashboard.style.display = 'block';
+                showNotification('Live stats dashboard shown', 'info');
+            } else {
+                statsDashboard.style.display = 'none';
+                showNotification('Live stats dashboard hidden', 'info');
+            }
+        }
+        
+
