@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exodia UNO - Game Development Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div class="particles-bg" id="particles-js"></div>
+    
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg">
+        <div class="parallax-layer layer-1"></div>
+        <div class="parallax-layer layer-2"></div>
+        <div class="parallax-layer layer-3"></div>
+    </div>
+    
+    <!-- Theme Customization Panel -->
+    <div class="theme-panel" id="themePanel">
+        <div class="theme-toggle">
+            <i class="fas fa-palette"></i>
+        </div>
+        <div class="theme-options">
+            <h4>Customize</h4>
+            <div class="theme-option">
+                <label>Theme:</label>
+                <select id="themeSelect" onchange="changeTheme(this.value)">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                    <option value="neon">Neon</option>
+                </select>
+            </div>
+            <div class="theme-option">
+                <label>Animation Speed:</label>
+                <input type="range" id="animationSpeed" min="0.5" max="2" step="0.1" value="1" onchange="changeAnimationSpeed(this.value)">
+            </div>
+            <div class="theme-option">
+                <label>Particle Density:</label>
+                <select id="particleDensity" onchange="changeParticleDensity(this.value)">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Statistics Dashboard -->
+    <div class="live-stats-dashboard" id="liveStats">
+        <div class="stats-header">
+            <h3><i class="fas fa-chart-line"></i> Live Stats</h3>
+            <span class="status-indicator online">Online</span>
+            <button class="minimize-btn" onclick="toggleStatsDashboard()" title="Minimize">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="onlinePlayers">12,847</span>
+                    <span class="stat-label">Players Online</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="activeServers">24</span>
+                    <span class="stat-label">Active Servers</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-value" id="tournaments">3</span>
+                    <span class="stat-label">Live Tournaments</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <h2>Exodia UNO</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <p>Loading amazing experiences...</p>
+        </div>
+    </div>
+    
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h1>Exodia UNO</h1>
+                <span class="logo-subtitle">Game Studio</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#games" class="nav-link">Games</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#team" class="nav-link">Team</a></li>
+                <li><a href="#careers" class="nav-link">Careers</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <div class="hero-text" data-aos="fade-right" data-aos-duration="1000">
+                    <h2 class="hero-title">
+                        <span class="title-line">Crafting</span>
+                        <span class="title-line highlight">Epic</span>
+                        <span class="title-line">Experiences</span>
+                    </h2>
+                    <p class="hero-subtitle">We create immersive worlds where imagination meets technology</p>
+                    <div class="hero-stats">
+                        <div class="stat" data-aos="zoom-in" data-aos-delay="200">
+                            <span class="stat-number" data-target="15">0</span>
+                            <span class="stat-label">Games Released</span>
+                        </div>
+                        <div class="stat" data-aos="zoom-in" data-aos-delay="400">
+                            <span class="stat-number" data-target="50">0</span>
+                            <span class="stat-label">M+ Downloads</span>
+                        </div>
+                        <div class="stat" data-aos="zoom-in" data-aos-delay="600">
+                            <span class="stat-number" data-target="8">0</span>
+                            <span class="stat-label">Awards Won</span>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <button class="cta-button primary" onclick="openGameDemo()" data-aos="fade-up" data-aos-delay="800">
+                            <i class="fas fa-play"></i>
+                            Play Our Games
+                        </button>
+                        <button class="cta-button secondary" onclick="scrollToSection('careers')" data-aos="fade-up" data-aos-delay="1000">
+                            <i class="fas fa-users"></i>
+                            Join Our Team
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="game-card" onclick="openGameDemo()">
+                        <div class="card-glow"></div>
+                        <div class="card-content">
+                            <div class="game-icon">
+                                <i class="fas fa-dragon"></i>
+                            </div>
+                            <h3>Dragon Quest</h3>
+                            <p>Epic RPG Adventure</p>
+                            <div class="game-stats">
+                                <span class="rating">★★★★★</span>
+                                <span class="players">2M+ Players</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Carousel Section -->
+        <section class="hero-carousel-section" data-aos="fade-up" data-aos-duration="1200">
+            <div class="carousel-container">
+                <div class="carousel-header">
+                    <h2>Choose Your Hero</h2>
+                    <p>Select your champion and begin your adventure</p>
+                </div>
+                
+                <div class="carousel-wrapper">
+                    <div class="carousel-track" id="heroCarousel">
+                        <!-- Hero Card 1 -->
+                        <div class="hero-card active" data-hero="warrior">
+                            <div class="hero-card-image">
+                                <div class="hero-avatar">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="hero-glow"></div>
+                            </div>
+                            <div class="hero-card-content">
+                                <h3>Valiant Warrior</h3>
+                                <p class="hero-class">Tank • Guardian</p>
+                                <div class="hero-stats-mini">
+                                    <div class="stat-mini">
+                                        <span class="stat-value">95</span>
+                                        <span class="stat-label">Defense</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">75</span>
+                                        <span class="stat-label">Attack</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">60</span>
+                                        <span class="stat-label">Speed</span>
+                                    </div>
+                                </div>
+                                <div class="hero-abilities">
+                                    <span class="ability">Shield Bash</span>
+                                    <span class="ability">Guardian's Aura</span>
+                                </div>
+                            </div>
+                            <div class="hero-card-overlay">
+                                <button class="select-hero-btn" onclick="selectHero('warrior')">
+                                    <i class="fas fa-sword"></i>
+                                    Select Hero
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Card 2 -->
+                        <div class="hero-card" data-hero="mage">
+                            <div class="hero-card-image">
+                                <div class="hero-avatar">
+                                    <i class="fas fa-magic"></i>
+                                </div>
+                                <div class="hero-glow"></div>
+                            </div>
+                            <div class="hero-card-content">
+                                <h3>Arcane Mage</h3>
+                                <p class="hero-class">Magic • DPS</p>
+                                <div class="hero-stats-mini">
+                                    <div class="stat-mini">
+                                        <span class="stat-value">40</span>
+                                        <span class="stat-label">Defense</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">95</span>
+                                        <span class="stat-label">Attack</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">80</span>
+                                        <span class="stat-label">Speed</span>
+                                    </div>
+                                </div>
+                                <div class="hero-abilities">
+                                    <span class="ability">Fireball</span>
+                                    <span class="ability">Arcane Shield</span>
+                                </div>
+                            </div>
+                            <div class="hero-card-overlay">
+                                <button class="select-hero-btn" onclick="selectHero('mage')">
+                                    <i class="fas fa-magic"></i>
+                                    Select Hero
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Card 3 -->
+                        <div class="hero-card" data-hero="archer">
+                            <div class="hero-card-image">
+                                <div class="hero-avatar">
+                                    <i class="fas fa-bow-arrow"></i>
+                                </div>
+                                <div class="hero-glow"></div>
+                            </div>
+                            <div class="hero-card-content">
+                                <h3>Shadow Archer</h3>
+                                <p class="hero-class">Ranged • Assassin</p>
+                                <div class="hero-stats-mini">
+                                    <div class="stat-mini">
+                                        <span class="stat-value">50</span>
+                                        <span class="stat-label">Defense</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">85</span>
+                                        <span class="stat-label">Attack</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">95</span>
+                                        <span class="stat-label">Speed</span>
+                                    </div>
+                                </div>
+                                <div class="hero-abilities">
+                                    <span class="ability">Precise Shot</span>
+                                    <span class="ability">Shadow Step</span>
+                                </div>
+                            </div>
+                            <div class="hero-card-overlay">
+                                <button class="select-hero-btn" onclick="selectHero('archer')">
+                                    <i class="fas fa-bow-arrow"></i>
+                                    Select Hero
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Card 4 -->
+                        <div class="hero-card" data-hero="healer">
+                            <div class="hero-card-image">
+                                <div class="hero-avatar">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="hero-glow"></div>
+                            </div>
+                            <div class="hero-card-content">
+                                <h3>Divine Healer</h3>
+                                <p class="hero-class">Support • Healer</p>
+                                <div class="hero-stats-mini">
+                                    <div class="stat-mini">
+                                        <span class="stat-value">70</span>
+                                        <span class="stat-label">Defense</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">60</span>
+                                        <span class="stat-label">Attack</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">85</span>
+                                        <span class="stat-label">Speed</span>
+                                    </div>
+                                </div>
+                                <div class="hero-abilities">
+                                    <span class="ability">Divine Light</span>
+                                    <span class="ability">Restoration</span>
+                                </div>
+                            </div>
+                            <div class="hero-card-overlay">
+                                <button class="select-hero-btn" onclick="selectHero('healer')">
+                                    <i class="fas fa-heart"></i>
+                                    Select Hero
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Card 5 -->
+                        <div class="hero-card" data-hero="berserker">
+                            <div class="hero-card-image">
+                                <div class="hero-avatar">
+                                    <i class="fas fa-axe"></i>
+                                </div>
+                                <div class="hero-glow"></div>
+                            </div>
+                            <div class="hero-card-content">
+                                <h3>Raging Berserker</h3>
+                                <p class="hero-class">Melee • DPS</p>
+                                <div class="hero-stats-mini">
+                                    <div class="stat-mini">
+                                        <span class="stat-value">80</span>
+                                        <span class="stat-label">Defense</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">100</span>
+                                        <span class="stat-label">Attack</span>
+                                    </div>
+                                    <div class="stat-mini">
+                                        <span class="stat-value">70</span>
+                                        <span class="stat-label">Speed</span>
+                                    </div>
+                                </div>
+                                <div class="hero-abilities">
+                                    <span class="ability">Rage Mode</span>
+                                    <span class="ability">Whirlwind</span>
+                                </div>
+                            </div>
+                            <div class="hero-card-overlay">
+                                <button class="select-hero-btn" onclick="selectHero('berserker')">
+                                    <i class="fas fa-axe"></i>
+                                    Select Hero
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carousel Controls -->
+                <div class="carousel-controls">
+                    <div class="carousel-dots" id="carouselDots">
+                        <span class="dot active" onclick="goToSlide(0)"></span>
+                        <span class="dot" onclick="goToSlide(1)"></span>
+                        <span class="dot" onclick="goToSlide(2)"></span>
+                        <span class="dot" onclick="goToSlide(3)"></span>
+                        <span class="dot" onclick="goToSlide(4)"></span>
+                    </div>
+                </div>
+
+                <!-- Selected Hero Info -->
+                <div class="selected-hero-info" id="selectedHeroInfo">
+                    <div class="selected-hero-content">
+                        <h3>No Hero Selected</h3>
+                        <p>Choose a hero to see their detailed information and start your adventure!</p>
+                        <button class="start-adventure-btn" onclick="startAdventure()" disabled>
+                            <i class="fas fa-play"></i>
+                            Start Adventure
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hero Comparison Section -->
+        <section class="hero-comparison-section" data-aos="fade-up" data-aos-duration="1200">
+            <div class="section-header">
+                <h2>Hero Comparison</h2>
+                <p>Compare heroes and find your perfect match</p>
+            </div>
+            <div class="comparison-container">
+                <div class="comparison-hero left" id="leftHero">
+                    <div class="hero-selector">
+                        <select onchange="selectComparisonHero('left', this.value)">
+                            <option value="">Select Hero</option>
+                            <option value="warrior">Iron Warrior</option>
+                            <option value="mage">Crystal Mage</option>
+                            <option value="archer">Shadow Archer</option>
+                            <option value="healer">Divine Healer</option>
+                            <option value="berserker">Raging Berserker</option>
+                        </select>
+                    </div>
+                    <div class="hero-stats-comparison" id="leftHeroStats">
+                        <!-- Stats will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="comparison-vs">
+                    <div class="vs-circle">
+                        <span>VS</span>
+                    </div>
+                </div>
+                <div class="comparison-hero right" id="rightHero">
+                    <div class="hero-selector">
+                        <select onchange="selectComparisonHero('right', this.value)">
+                            <option value="">Select Hero</option>
+                            <option value="warrior">Iron Warrior</option>
+                            <option value="mage">Crystal Mage</option>
+                            <option value="archer">Shadow Archer</option>
+                            <option value="healer">Divine Healer</option>
+                            <option value="berserker">Raging Berserker</option>
+                        </select>
+                    </div>
+                    <div class="hero-stats-comparison" id="rightHeroStats">
+                        <!-- Stats will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="games" class="games-section">
+            <div class="section-header">
+                <h2>Our Latest Games</h2>
+                <p>Experience the magic of our creations</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-item" onclick="openGameDemo('Cyber Warriors')">
+                    <div class="game-image">
+                        <div class="game-overlay">
+                            <button class="play-btn"><i class="fas fa-play"></i></button>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Cyber Warriors</h3>
+                        <p>Futuristic Action RPG</p>
+                        <div class="game-tags">
+                            <span class="tag">Action</span>
+                            <span class="tag">RPG</span>
+                            <span class="tag">Multiplayer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-item" onclick="openGameDemo('Space Explorer')">
+                    <div class="game-image">
+                        <div class="game-overlay">
+                            <button class="play-btn"><i class="fas fa-play"></i></button>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Space Explorer</h3>
+                        <p>Intergalactic Adventure</p>
+                        <div class="game-tags">
+                            <span class="tag">Adventure</span>
+                            <span class="tag">Strategy</span>
+                            <span class="tag">Single Player</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-item" onclick="openGameDemo('Racing Legends')">
+                    <div class="game-image">
+                        <div class="game-overlay">
+                            <button class="play-btn"><i class="fas fa-play"></i></button>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Racing Legends</h3>
+                        <p>High-Speed Competition</p>
+                        <div class="game-tags">
+                            <span class="tag">Racing</span>
+                            <span class="tag">Sports</span>
+                            <span class="tag">Multiplayer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Exodia UNO</h2>
+                    <p>Founded in 2017, Exodia UNO has been at the forefront of game development innovation. Our team of passionate developers, artists, and designers work together to create unforgettable gaming experiences.</p>
+                    <div class="tech-stack">
+                        <h3>Our Tech Stack</h3>
+                        <div class="tech-icons">
+                            <div class="tech-icon" data-tooltip="Unity Engine"><i class="fab fa-unity"></i><span>Unity</span></div>
+                            <div class="tech-icon" data-tooltip="Unreal Engine"><i class="fab fa-unreal"></i><span>Unreal</span></div>
+                            <div class="tech-icon" data-tooltip="Version Control"><i class="fab fa-github"></i><span>Git</span></div>
+                            <div class="tech-icon" data-tooltip="Backend Development"><i class="fab fa-python"></i><span>Python</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="studio-image">
+                        <div class="image-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Team Section -->
+        <section id="team" class="team-section">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Meet Our Team</h2>
+                <p>The creative minds behind our epic games</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-member" data-aos="zoom-in" data-aos-delay="200" onclick="showTeamMember('john')">
+                    <div class="member-avatar">
+                        <img src="https://via.placeholder.com/150/ff6b35/ffffff?text=JD" alt="John Doe">
+                        <div class="member-status online"></div>
+                    </div>
+                    <h3>John Doe</h3>
+                    <p class="role">Lead Game Designer</p>
+                    <div class="member-skills">
+                        <span class="skill">Unity</span>
+                        <span class="skill">C#</span>
+                        <span class="skill">Game Design</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-mini">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Years</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member" data-aos="zoom-in" data-aos-delay="400" onclick="showTeamMember('sarah')">
+                    <div class="member-avatar">
+                        <img src="https://via.placeholder.com/150/4CAF50/ffffff?text=SJ" alt="Sarah Johnson">
+                        <div class="member-status online"></div>
+                    </div>
+                    <h3>Sarah Johnson</h3>
+                    <p class="role">Senior Developer</p>
+                    <div class="member-skills">
+                        <span class="skill">C++</span>
+                        <span class="skill">Graphics</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-mini">
+                            <span class="stat-value">10</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-value">6</span>
+                            <span class="stat-label">Years</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member" data-aos="zoom-in" data-aos-delay="600" onclick="showTeamMember('mike')">
+                    <div class="member-avatar">
+                        <img src="https://via.placeholder.com/150/2196F3/ffffff?text=MR" alt="Mike Rodriguez">
+                        <div class="member-status online"></div>
+                    </div>
+                    <h3>Mike Rodriguez</h3>
+                    <p class="role">Art Director</p>
+                    <div class="member-skills">
+                        <span class="skill">3D Modeling</span>
+                        <span class="skill">Animation</span>
+                    </div>
+                    <div class="member-stats">
+                        <div class="stat-mini">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Years</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Careers Section -->
+        <section id="careers" class="careers-section">
+            <div class="careers-content">
+                <div class="careers-text">
+                    <h2>Join Our Team</h2>
+                    <p>We're always looking for talented individuals who share our passion for creating amazing games.</p>
+                    <div class="open-positions">
+                        <h3>Open Positions</h3>
+                        <div class="position-item" onclick="applyForPosition('Senior Game Developer')">
+                            <h4>Senior Game Developer</h4>
+                            <p>Join our core development team</p>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+                        <div class="position-item" onclick="applyForPosition('3D Artist')">
+                            <h4>3D Artist</h4>
+                            <p>Create stunning visual assets</p>
+                            <button class="apply-btn">Apply Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Let's create something amazing together</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Visit Us</h3>
+                            <p>123 Game Studio Ave, Tech City, TC 12345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Call Us</h3>
+                            <p>+1 (555) GAME-123</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email Us</h3>
+                            <p>hello@exodiauno.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contactForm" onsubmit="submitContactForm(event)">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section">
+            <div class="newsletter-content">
+                <h2>Stay Updated</h2>
+                <p>Get the latest news about our games and studio updates</p>
+                <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Game Demo Modal -->
+    <div class="modal" id="gameModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeGameModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="modalGameTitle">Game Demo</h2>
+            </div>
+            <div class="modal-body">
+                <div class="game-demo-container">
+                    <div class="game-preview">
+                        <div class="game-screen">
+                            <div class="game-ui">
+                                <div class="health-bar">
+                                    <div class="health-fill"></div>
+                                </div>
+                                <div class="score">Score: <span id="gameScore">0</span></div>
+                            </div>
+                            <div class="game-character">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button onclick="startGame()" class="game-btn">Start Game</button>
+                        <button onclick="pauseGame()" class="game-btn">Pause</button>
+                        <button onclick="resetGame()" class="game-btn">Reset</button>
+                    </div>
+                    <div class="game-info-panel">
+                        <h3>Game Features</h3>
+                        <ul>
+                            <li>Immersive 3D Graphics</li>
+                            <li>Multiplayer Support</li>
+                            <li>Advanced AI Systems</li>
+                            <li>Real-time Physics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Member Modal -->
+    <div class="modal" id="teamModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeTeamModal()">&times;</span>
+            <div class="modal-header">
+                <h2 id="teamMemberName">Team Member</h2>
+            </div>
+            <div class="modal-body">
+                <div class="team-member-detail">
+                    <div class="member-avatar-large">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="member-info">
+                        <h3 id="memberRole">Role</h3>
+                        <p id="memberBio">Bio will be loaded here...</p>
+                        <div class="member-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="memberProjects">0</span>
+                                <span class="stat-label">Projects</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="memberExperience">0</span>
+                                <span class="stat-label">Years Experience</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Exodia UNO</h3>
+                </div>
+                <p>Creating the next generation of gaming experiences with passion, innovation, and cutting-edge technology.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" onclick="openSocialLink('twitter')"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link" onclick="openSocialLink('discord')"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link" onclick="openSocialLink('youtube')"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-link" onclick="openSocialLink('linkedin')"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Games</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="openGameDemo('Cyber Warriors')">Cyber Warriors</a></li>
+                    <li><a href="#" onclick="openGameDemo('Space Explorer')">Space Explorer</a></li>
+                    <li><a href="#" onclick="openGameDemo('Racing Legends')">Racing Legends</a></li>
+                    <li><a href="#" onclick="openGameDemo('Dragon Quest')">Dragon Quest</a></li>
+                    <li><a href="#" onclick="showComingSoon()">Coming Soon</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul class="footer-links">
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#team">Our Team</a></li>
+                    <li><a href="#careers">Careers</a></li>
+                    <li><a href="#" onclick="downloadPressKit()">Press Kit</a></li>
+                    <li><a href="#" onclick="showInvestorInfo()">Investors</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="openHelpCenter()">Help Center</a></li>
+                    <li><a href="#" onclick="openCommunity()">Community</a></li>
+                    <li><a href="#" onclick="reportBug()">Bug Reports</a></li>
+                    <li><a href="#" onclick="openFeedback()">Feedback</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Game Studio Ave, Tech City</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) GAME-123</p>
+                    <p><i class="fas fa-envelope"></i> hello@exodiauno.com</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; 2024 Exodia UNO Game Studio. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#" onclick="showPrivacyPolicy()">Privacy Policy</a>
+                    <a href="#" onclick="showTermsOfService()">Terms of Service</a>
+                    <a href="#" onclick="showCookiePolicy()">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
