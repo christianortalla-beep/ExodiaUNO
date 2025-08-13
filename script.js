@@ -442,6 +442,11 @@ function endDrag() {
 }
 
 function handleCarouselKeys(e) {
+    // Don't interfere with form inputs
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+        return;
+    }
+    
     switch(e.key) {
         case 'ArrowLeft':
         case 'a':
@@ -1078,16 +1083,25 @@ function formatNumber(num) {
 
 // Keyboard shortcuts
 document.addEventListener('keydown', function(event) {
+    // Don't interfere with form inputs
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.isContentEditable) {
+        return;
+    }
+    
     // ESC to close modals
     if (event.key === 'Escape') {
         const gameModal = document.getElementById('gameModal');
         const teamModal = document.getElementById('teamModal');
+        const authModal = document.getElementById('authModal'); // Added auth modal
         
         if (gameModal.classList.contains('show')) {
             closeGameModal();
         }
         if (teamModal.classList.contains('show')) {
             closeTeamModal();
+        }
+        if (authModal.classList.contains('active')) { // Added auth modal
+            closeAuthModal();
         }
     }
     
@@ -1114,12 +1128,16 @@ document.addEventListener('keydown', function(event) {
 window.addEventListener('click', function(event) {
     const gameModal = document.getElementById('gameModal');
     const teamModal = document.getElementById('teamModal');
+    const authModal = document.getElementById('authModal'); // Added auth modal
     
     if (event.target === gameModal) {
         closeGameModal();
     }
     if (event.target === teamModal) {
         closeTeamModal();
+    }
+    if (event.target === authModal) { // Added auth modal
+        closeAuthModal();
     }
 });
 
@@ -1194,5 +1212,217 @@ trackEvent('page_view', {
                 showNotification('Live stats dashboard hidden', 'info');
             }
         }
+
+        // Authentication System
+        let currentUser = null;
+        let isAuthenticated = false;
+
+        // Check if user is already logged in on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+        });
+
+        function checkAuthStatus() {
+            const savedUser = localStorage.getItem('exodiaUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                isAuthenticated = true;
+                updateAuthUI();
+                showNotification(`Welcome back, ${currentUser.username}!`, 'success');
+            } else {
+                // Show auth modal if not authenticated
+                setTimeout(() => {
+                    openAuthModal();
+                }, 2000); // Show after 2 seconds
+            }
+        }
+
+        function openAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Ensure form inputs can receive focus
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input');
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            }, 100);
+        }
+
+        function closeAuthModal() {
+            // Only allow closing if user is authenticated
+            if (!isAuthenticated) {
+                return;
+            }
+            const modal = document.getElementById('authModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchAuthTab(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const signupTab = document.getElementById('signupTab');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                signupTab.classList.remove('active');
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+            } else {
+                signupTab.classList.add('active');
+                loginTab.classList.remove('active');
+                signupForm.classList.add('active');
+                loginForm.classList.remove('active');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            // Simple validation
+            if (!email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Simulate login process
+            showNotification('Logging in...', 'info');
+            
+            setTimeout(() => {
+                // For demo purposes, accept any valid email format
+                if (email.includes('@') && password.length >= 6) {
+                    currentUser = {
+                        username: email.split('@')[0],
+                        email: email,
+                        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
+                    };
+                    
+                    isAuthenticated = true;
+                    
+                    if (rememberMe) {
+                        localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
+                    }
+                    
+                    updateAuthUI();
+                    closeAuthModal();
+                    showNotification(`Welcome, ${currentUser.username}!`, 'success');
+                    
+                    // Clear form
+                    document.getElementById('loginForm').reset();
+                } else {
+                    showNotification('Invalid email or password', 'error');
+                }
+            }, 1500);
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+
+            // Validation
+            if (!username || !email || !password || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            if (!agreeTerms) {
+                showNotification('Please agree to the terms and conditions', 'error');
+                return;
+            }
+
+            // Simulate signup process
+            showNotification('Creating account...', 'info');
+            
+            setTimeout(() => {
+                currentUser = {
+                    username: username,
+                    email: email,
+                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`
+                };
+                
+                isAuthenticated = true;
+                localStorage.setItem('exodiaUser', JSON.stringify(currentUser));
+                
+                updateAuthUI();
+                closeAuthModal();
+                showNotification(`Account created successfully! Welcome, ${username}!`, 'success');
+                
+                // Clear form
+                document.getElementById('signupForm').reset();
+            }, 1500);
+        }
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const userProfileBtn = document.getElementById('userProfileBtn');
+            const userName = document.getElementById('userName');
+
+            if (isAuthenticated && currentUser) {
+                loginBtn.style.display = 'none';
+                userProfileBtn.style.display = 'flex';
+                userName.textContent = currentUser.username;
+            } else {
+                loginBtn.style.display = 'flex';
+                userProfileBtn.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            isAuthenticated = false;
+            localStorage.removeItem('exodiaUser');
+            updateAuthUI();
+            showNotification('Logged out successfully', 'info');
+            // Force show auth modal again since authentication is required
+            setTimeout(() => {
+                openAuthModal();
+            }, 1000);
+        }
+
+        // Close modal when clicking outside - DISABLED for security
+        // document.addEventListener('click', function(event) {
+        //     const modal = document.getElementById('authModal');
+        //     if (event.target === modal) {
+        //         closeAuthModal();
+        //     }
+        // });
+
+        // Close modal with Escape key - DISABLED for security
+        // document.addEventListener('keydown', function(event) {
+        //     if (event.key === 'Escape') {
+        //         closeAuthModal();
+        //     }
+        // });
+
+        // User profile button click handler
+        document.getElementById('userProfileBtn').addEventListener('click', function() {
+            if (isAuthenticated) {
+                // Show user profile dropdown or modal
+                showNotification(`Logged in as ${currentUser.username}`, 'info');
+            }
+        });
         
 
